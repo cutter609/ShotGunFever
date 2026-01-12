@@ -17,6 +17,30 @@ public class Timer : MonoBehaviour
     {
         TimerDigits = gameObject.GetComponentsInChildren<TextMeshProUGUI>();
     }
+    public void EndTimer(float Penalty)
+    {
+        if (!TimerEnded)
+        {
+            ClockTime += Penalty;
+            transform.position -= new Vector3(0, 175, 0);
+
+            LevelController levelController = GameObject.FindGameObjectWithTag("World").GetComponent<LevelController>();
+            if (levelController.Endless)
+            {
+                TimerDigits[^1].enabled = false;
+            }
+            else
+            {
+                TimerDigits[^1].text = "+" + Penalty.ToString() + " Seconds";
+            }
+
+            //prevents function from accidently running twice
+            TimerEnded = true;
+
+            //might not be necessary
+            TimerActive = false;
+        }
+    }
     void Update()
     {
         if (TimerActive)
@@ -41,27 +65,6 @@ public class Timer : MonoBehaviour
         if (!TimerActive)
         {
             TimerActive = true;
-        }
-    }
-    public void EndTimer(float Penalty)
-    {
-        if (!TimerEnded)
-        {
-            ClockTime += Penalty;
-            transform.position -= new Vector3(0, 175, 0);
-
-            LevelController levelController = GameObject.FindGameObjectWithTag("World").GetComponent<LevelController>();
-            if (levelController.Endless)
-            {
-                TimerDigits[TimerDigits.Length - 1].enabled = false;
-            }
-            else
-            {
-                TimerDigits[TimerDigits.Length - 1].text = "+" + Penalty.ToString() + " Seconds";
-            }
-
-            //prevents function from accidently running twice
-            TimerEnded = true;
         }
     }
 }
