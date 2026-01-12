@@ -56,13 +56,14 @@ public class Player : MonoBehaviour
     private Animator animator;
 
     private LevelController levelController;
+    private UI UIObject;
 
     public bool WaitForThreeFrames = false;
 
     private void Awake()
     {
         levelController = GameObject.FindGameObjectWithTag("World").GetComponent<LevelController>();
-        DeathScreen = levelController.DeathScreen;
+        UIObject = GameObject.FindGameObjectWithTag("UI").GetComponent<UI>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         MainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         GunShotAudio = gameObject.GetComponent<AudioSource>();
@@ -180,7 +181,7 @@ public class Player : MonoBehaviour
         if (!Dead)
         {
             Dead = true;
-            DeathScreen.SetActive(true);
+            UIObject.DeathScreen.SetActive(true);
             StartCoroutine(ResetMouseCursor());
         }
 

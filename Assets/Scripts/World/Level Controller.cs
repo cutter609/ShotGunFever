@@ -43,39 +43,18 @@ public class LevelController : MonoBehaviour
     
     private Player player;
     private Timer timer;
-    private readonly float DefaultDeltatime = 0.02f;//50 per second
+    private UI UIObject;
+    [HideInInspector] public readonly float DefaultDeltatime = 0.02f;//50 per second
 
-    private GameObject[] Panels;
-    [HideInInspector] public GameObject StartScreen;
-    [HideInInspector] public GameObject WinScreen;
-    [HideInInspector] public GameObject DeathScreen;
-    [HideInInspector] public GameObject PauseScreen;
+
+
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         timer = GameObject.FindGameObjectWithTag("Timer").GetComponent<Timer>();
+        UIObject = GameObject.FindGameObjectWithTag("UI").GetComponent<UI>();
         EnemyFolder = GameObject.FindGameObjectWithTag("Enemy Folder");
-
-        Panels = GameObject.FindGameObjectsWithTag("Panel");
-        foreach (GameObject panel in Panels)
-        {
-            switch (panel.name)
-            {
-                case "Start":
-                    StartScreen = panel;
-                    break;
-                case "Win":
-                    WinScreen = panel;
-                    break;
-                case "Death":
-                    DeathScreen = panel;
-                    break;
-                case "Pause":
-                    PauseScreen = panel;
-                    break;
-            }
-        }
 
         //Resumes game when level is loaded
         player.Paused = false;
@@ -88,7 +67,7 @@ public class LevelController : MonoBehaviour
 
         if (FrozenStart)
         {
-            StartScreen.SetActive(false);
+            UIObject.StartScreen.SetActive(false);
             player.IsGrounded = false;
             player.InAir = true;
             player.gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
@@ -102,13 +81,13 @@ public class LevelController : MonoBehaviour
     private void Update()
     {
         //Pause
-        if (Input.GetKeyDown(KeyCode.Escape) && !DeathScreen.activeSelf && !WinScreen.activeSelf && !PauseScreen.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !UIObject.DeathScreen.activeSelf && !UIObject.WinScreen.activeSelf && !UIObject.PauseScreen.activeSelf)
         {
-            PauseScreen.SetActive(true);
+            UIObject.PauseScreen.SetActive(true);
             Time.timeScale = 0.0f;
             player.Paused = true;
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && PauseScreen.activeSelf)
+        else if (Input.GetKeyDown(KeyCode.Escape) && UIObject.PauseScreen.activeSelf)
         {
             Resume();
         }
@@ -120,11 +99,11 @@ public class LevelController : MonoBehaviour
 
         if (!timer.TimerActive)
         {
-            StartScreen.GetComponent<CanvasGroup>().alpha = Mathf.Pow(Mathf.Sin(Time.time * StartScreenFlashSpeed + 3.1415f / 2.0f), 2);
+            UIObject.StartScreen.GetComponent<CanvasGroup>().alpha = Mathf.Pow(Mathf.Sin(Time.time * StartScreenFlashSpeed + 3.1415f / 2.0f), 2);
         }
         else
         {
-            StartScreen.SetActive(false);
+            UIObject.StartScreen.SetActive(false);
         }
 
         //Control level where player start frozen
@@ -245,7 +224,7 @@ public class LevelController : MonoBehaviour
     {
         if (collision.tag == "Player" && !player.Dead)
         {
-            WinScreen.SetActive(true);
+            UIObject.WinScreen.SetActive(true);
             Time.timeScale = 0.0f;
             player.Paused = true;
             timer.EndTimer(AliveEnemyTimePenalty * EnemyCount);
@@ -280,7 +259,7 @@ public class LevelController : MonoBehaviour
     }
     public void Resume()
     {
-        PauseScreen.SetActive(false);
+        UIObject.PauseScreen.SetActive(false);
         player.Paused = false;
         ResetTime();
     }

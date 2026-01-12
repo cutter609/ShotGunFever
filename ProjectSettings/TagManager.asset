@@ -18,6 +18,7 @@ TagManager:
   - Enemy Folder
   - Agent
   - Agent Limb
+  - UI
   layers:
   - Default
   - TransparentFX

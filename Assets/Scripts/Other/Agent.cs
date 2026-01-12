@@ -7,10 +7,10 @@ public class Agent : MonoBehaviour
     public bool StartFacingLeft = false;
 
     [Header("Agent")]
-    public int Health = 50;
-    public int DetectionDistance = 30;
-    public float TargetingDelayTime = 1;
-    public float ShootingDelay = 1;
+    public int Health                   = 50;
+    public int DetectionDistance        = 30;
+    public float TargetingDelayTime     = 1;
+    public float ShootingDelay          = 1;
 
     private bool MovingToShoot = false;
     private LayerMask ExcludeAfterDeathLayers;
@@ -21,12 +21,12 @@ public class Agent : MonoBehaviour
     [Header("Shooting")]
     public Rigidbody2D ShootingArmRb1;
     public Rigidbody2D ShootingArmRb2;
-    public float ArmRotateForce = 500;
+    public float ArmRotateForce         = 500;
 
-    public float AngleAdjustment = 23;
-    public float LeftSideMulitplier = 0.7f;
+    public float AngleAdjustment        = 23;
+    public float LeftSideMulitplier     = 0.7f;
 
-    public int AngleShootRange = 15;
+    public int AngleShootRange          = 15;
 
     private LayerMask PlayerBlockLineOfSightlayers;
 
@@ -35,39 +35,23 @@ public class Agent : MonoBehaviour
 
     public HingeJoint2D ForeLeft;
     public Rigidbody2D Hand;
-    public float MoveSpeed = 100;
+    public float MoveSpeed              = 100;
     public Transform SecondHandPoint;
     public Transform GunPoint;
     public GameObject Gun;
 
-    //private AudioSource GunShotAudio;
-
 
     [Space(15)]
     [Header("Main Menu Settings")]
-    public float ReTargetTime = 3;
-    public float LaunchSpeed = 1000.0f;
-    public float MaxSideSpeed = 200.0f;
-    public float MaxTorque = 50.0f;
+    public float ReTargetTime           = 3;
+    public float LaunchSpeed            = 1000.0f;
+    public float MaxSideSpeed           = 200.0f;
+    public float MaxTorque              = 50.0f;
 
     private bool InMainMenu = true;
 
-    /*
-    [Space(15)]
-    [Header("Movement")]
-    public Rigidbody2D LeftLegRb;
-    public Rigidbody2D RightLegRb;
-    public Rigidbody2D TorsoRb;
-
-
-    public float Speed       = 500;
-    public float StepWeight  = 0.5f;
-    public float MaxSpeed    = 3;
-    */
-
 
     private GameObject Player = null;
-    private Animator Animator;
 
     public GameObject Bullet;
     public Transform FirePoint;
@@ -87,9 +71,6 @@ public class Agent : MonoBehaviour
             Torso.GetComponent<SpriteRenderer>().enabled = false;
             Torso.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
         }
-
-        Animator = GetComponent<Animator>();
-        //GunShotAudio = GetComponent<AudioSource>();
 
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
@@ -149,13 +130,6 @@ public class Agent : MonoBehaviour
                     Head.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
                     Torso.GetComponent<SpriteRenderer>().enabled = false;
                     Torso.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
-
-                    /*
-                    JointAngleLimits2D Limits = ForeLeft.limits;
-                    Limits.min = 0;
-                    Limits.max = 135;
-                    ForeLeft.limits = Limits;
-                    */
                 }
                 else
                 {
@@ -165,55 +139,8 @@ public class Agent : MonoBehaviour
                     Head.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
                     Torso.GetComponent<SpriteRenderer>().enabled = true;
                     Torso.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
-
-                    /*
-                    JointAngleLimits2D Limits = ForeLeft.limits;
-                    Limits.min = -135;
-                    Limits.max = 0;
-                    ForeLeft.limits = Limits;
-                    */
                 }
             }
-
-            if (Time.timeScale < 1)
-            {
-                //GunShotAudio.pitch = 0.4f;
-            }
-            else
-            {
-                //GunShotAudio.pitch = 1.0f;
-            }
-
-            /*
-            //Animation and Movement
-            if (Input.GetKey(KeyCode.A))
-            {
-                Animator.Play("WalkLeft");
-                StartCoroutine(MoveLeft(StepWeight));
-                Head.transform.localScale = new Vector3(-1, 1, 1);
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                Animator.Play("WalkRight");
-                StartCoroutine(MoveRight(StepWeight));
-                Head.transform.localScale = new Vector3(1, 1, 1);
-            }
-            else
-            {
-                Animator.Play("EnemyIdle");
-            }
-
-
-            //Limits max speed
-            if (TorsoRb.linearVelocity.x > MaxSpeed)
-            {
-                TorsoRb.linearVelocity = new Vector2(MaxSpeed, TorsoRb.linearVelocity.y);
-            }
-            else if (TorsoRb.linearVelocity.x < -MaxSpeed)
-            {
-                TorsoRb.linearVelocity = new Vector2(-MaxSpeed, TorsoRb.linearVelocity.y);
-            }
-            */
         }
         else
         {
@@ -235,8 +162,8 @@ public class Agent : MonoBehaviour
                 }
 
                 //stops agent from trying to stay upright
-                EnemyBalance[] BalanceScript = gameObject.GetComponentsInChildren<EnemyBalance>();
-                foreach (EnemyBalance Script in BalanceScript)
+                AgentBalance[] BalanceScript = gameObject.GetComponentsInChildren<AgentBalance>();
+                foreach (AgentBalance Script in BalanceScript)
                 {
                     Script.enabled = false;
                 }
