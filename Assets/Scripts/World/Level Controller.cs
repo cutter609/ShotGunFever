@@ -8,6 +8,7 @@ using UnityEngine.Tilemaps;
 
 public class LevelController : MonoBehaviour
 {
+    private float temptime;
     [Header("Enemies")]
     public float AliveEnemyTimePenalty = 3;
 
@@ -27,6 +28,8 @@ public class LevelController : MonoBehaviour
     public Tilemap tileMap;
     public float TilemapColorCycleSpeed = 10;
 
+    private Vector3 PlayerStartPosition = new Vector3(0, 0.28f, 0);
+    private float PositionChangeToStartTimer = 0.1f;
     private float TilemapHue;
 
 
@@ -42,6 +45,7 @@ public class LevelController : MonoBehaviour
 
     
     private Player player;
+    public Ghost ghost;
     private Timer timer;
     private UI UIObject;
     [HideInInspector] public readonly float DefaultDeltatime = 0.02f;//50 per second
@@ -77,6 +81,10 @@ public class LevelController : MonoBehaviour
         {
             StartCoroutine(EndlessSpawn());
         }
+        else
+        {
+            ghost = GameObject.FindGameObjectWithTag("Ghost").GetComponent<Ghost>();
+        }
     }
     private void Update()
     {
@@ -92,7 +100,7 @@ public class LevelController : MonoBehaviour
             Resume();
         }
 
-        if (!timer.TimerActive && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)))
+        if (!timer.TimerActive && (player.transform.position - PlayerStartPosition).magnitude > PositionChangeToStartTimer)
         {
             timer.StartTimer();
         }
@@ -109,7 +117,7 @@ public class LevelController : MonoBehaviour
         //Control level where player start frozen
         if (FrozenStart)
         {
-            player.gameObject.transform.position = new Vector3(0, 0.27f, 0);
+            player.gameObject.transform.position = PlayerStartPosition;
             player.gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
 
             Vector2 direction = player.transform.position - FrozenStartTarget.gameObject.transform.position;
@@ -234,10 +242,13 @@ public class LevelController : MonoBehaviour
             {
                 int SceneIndex = SceneManager.GetActiveScene().buildIndex;
                 MusicController MusicControllerScript = GameObject.FindGameObjectWithTag("Music Controller").GetComponent<MusicController>();
+
                 float PreviousBestTime = MusicControllerScript.BestTimes[SceneIndex];
                 if (timer.ClockTime < PreviousBestTime || PreviousBestTime == 0)
                 {
                     MusicControllerScript.BestTimes[SceneIndex] = timer.ClockTime;
+                    MusicControllerScript.SceneGhostPaths[SceneIndex] = ghost.GhostPathNew;
+                    Debug.Log("Time and ghost updated");
                 }
             }
         }

@@ -19,6 +19,7 @@ TagManager:
   - Agent
   - Agent Limb
   - UI
+  - Ghost
   layers:
   - Default
   - TransparentFX

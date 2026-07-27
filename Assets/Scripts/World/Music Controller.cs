@@ -12,10 +12,14 @@ public class MusicController : MonoBehaviour
 
     public float[] BestTimes;
 
+    public List<Ghost.GhostPoint>[] SceneGhostPaths;
+
 
     void Awake()
     {
-        BestTimes = new float[SceneManager.sceneCountInBuildSettings];
+        int SceneCount = SceneManager.sceneCountInBuildSettings;
+        BestTimes = new float[SceneCount];
+        SceneGhostPaths = new List<Ghost.GhostPoint>[SceneCount];
 
         if (instance == null)
         {
