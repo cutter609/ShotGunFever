@@ -31,6 +31,7 @@ public class LevelController : MonoBehaviour
     private Vector3 PlayerStartPosition = new Vector3(0, 0.28f, 0);
     private float PositionChangeToStartTimer = 0.1f;
     private float TilemapHue;
+    public Color TileMapColor;
 
 
     [Space(15)]
@@ -85,6 +86,8 @@ public class LevelController : MonoBehaviour
         {
             ghost = GameObject.FindGameObjectWithTag("Ghost").GetComponent<Ghost>();
         }
+
+        TileMapColor = tileMap.color;
     }
     private void Update()
     {
@@ -157,9 +160,9 @@ public class LevelController : MonoBehaviour
             TilemapHue += Time.deltaTime * TilemapColorCycleSpeed / 100;
             if (TilemapHue > 1)//Hue must be value between 0 and 1
             { TilemapHue -= 1; }
-            Color NewColor = Color.HSVToRGB(TilemapHue, 1.0f, 1.0f);
+            TileMapColor = Color.HSVToRGB(TilemapHue, 1.0f, 1.0f);
 
-            tileMap.color = NewColor;
+            tileMap.color = TileMapColor;
         }
     }
     IEnumerator EndlessSpawn()

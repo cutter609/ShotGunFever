@@ -28,6 +28,10 @@ public class Agent : MonoBehaviour
 
     public int AngleShootRange          = 15;
 
+    public AudioSource GunShotAudio;
+
+
+
     private LayerMask PlayerBlockLineOfSightlayers;
 
     public GameObject Head;
@@ -86,6 +90,7 @@ public class Agent : MonoBehaviour
                                         (1 << LayerMask.NameToLayer("Player")) | 
                                         (1 << LayerMask.NameToLayer("Bullet"));
 
+        GunShotAudio = gameObject.GetComponent<AudioSource>();
         StartCoroutine(DelayedTargeting());
         StartCoroutine(Target());
         if (InMainMenu)
@@ -265,7 +270,7 @@ public class Agent : MonoBehaviour
                     {
                         Physics2D.IgnoreCollision(BulletObject.GetComponent<Collider2D>(), collider);
                     }
-                    //PlayAudioRandomPitch(GunShotAudio);
+                    PlayAudioRandomPitch(GunShotAudio);
                     yield return new WaitForSeconds(ShootingDelay);
                 }
                 else

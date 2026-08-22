@@ -292,4 +292,6 @@ MonoBehaviour:
   MoveStrength: 30
   Damage: 10
   DestroyDelay: 10
+  BloodParticles: {fileID: 389290155738090314, guid: 47722c3487481f24f997cdef13bed282, type: 3}
+  GroundHitParticles: {fileID: 7930916484776403095, guid: 34e509466fbdf3b459fff287da519b2e, type: 3}
   SpawnSource: 

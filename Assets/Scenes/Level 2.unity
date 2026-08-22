@@ -308,6 +308,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Agent (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6961603805275594552, guid: 52c2f66e3beba044fa2c3d75a5d13f11, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1325,6 +1329,7 @@ MonoBehaviour:
   RainbowEnabled: 0
   tileMap: {fileID: 2031772314}
   TilemapColorCycleSpeed: 10
+  TileMapColor: {r: 0, g: 0, b: 0, a: 0}
   Endless: 0
   Agent: {fileID: 0}
   SpawnIntervalTime: 0

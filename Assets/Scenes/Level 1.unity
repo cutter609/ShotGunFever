@@ -572,6 +572,7 @@ MonoBehaviour:
   RainbowEnabled: 0
   tileMap: {fileID: 2031772314}
   TilemapColorCycleSpeed: 10
+  TileMapColor: {r: 0, g: 0, b: 0, a: 0}
   Endless: 0
   Agent: {fileID: 0}
   SpawnIntervalTime: 0

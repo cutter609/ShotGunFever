@@ -12,10 +12,19 @@ public class Bullet : MonoBehaviour
     public int Damage            = 10;
     public int DestroyDelay      = 10;
 
+    [Space(15)]
+    [Header("Particles")]
+    public ParticleSystem BloodParticles;
+    public ParticleSystem GroundHitParticles;
+
 
     [HideInInspector] public string SpawnSource;
     private Rigidbody2D rb;
     private Vector2 Velocity;
+
+    private LevelController levelController;
+
+
 
 
     private void Awake()
@@ -24,7 +33,10 @@ public class Bullet : MonoBehaviour
         Velocity = transform.right * Speed;
         rb.linearVelocity = Velocity;
 
-        Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true); 
+        //ignores collision with other bullets
+        Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
+
+        levelController = GameObject.FindGameObjectWithTag("World").GetComponent<LevelController>();
 
         StartCoroutine(DestroyAfterDelay());
     }
@@ -40,12 +52,21 @@ public class Bullet : MonoBehaviour
             case "Agent Limb":
                 Hit.GetComponentInParent<Agent>().BulletHit(Damage);
                 MoveObject(Hit);
+                ParticleSystem ParticleAgent = Instantiate(BloodParticles, transform.position, transform.rotation);
+                PlayAudioRandomPitch(ParticleAgent.GetComponent<AudioSource>());
                 break;
             case "Button":
                 Hit.GetComponent<Button>().Activate();
                 break;
             case "Barrel":
                 Hit.GetComponent<ExplosiveBarrel>().Explode();
+                break;
+            case "Ground":
+                float zRotation = Mathf.Atan2(collision.contacts[0].normal.y, collision.contacts[0].normal.x) * Mathf.Rad2Deg;
+                ParticleSystem ParticleGround = Instantiate(GroundHitParticles, transform.position, Quaternion.Euler(0, 0, zRotation - 90));
+                var main = ParticleGround.main;
+                main.startColor = levelController.TileMapColor;
+                PlayAudioRandomPitch(ParticleGround.GetComponent<AudioSource>());
                 break;
         }
         Rigidbody2D Hitrb = Hit.GetComponent<Rigidbody2D>();
@@ -64,5 +85,12 @@ public class Bullet : MonoBehaviour
     {
         yield return new WaitForSeconds(DestroyDelay);
         Destroy(gameObject);
+    }
+    private void PlayAudioRandomPitch(AudioSource audio)
+    {
+        float CurrentPitch = audio.pitch;
+        audio.pitch = CurrentPitch + Random.Range(-0.05f, 0.05f);
+        audio.Play();
+        audio.pitch = CurrentPitch;
     }
 }
