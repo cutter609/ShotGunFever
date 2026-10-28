@@ -39,7 +39,7 @@ public class Ghost : MonoBehaviour
     private Player PlayerScript;
     private Timer timer;
 
-
+    public GameObject Pump;
 
 
     void Awake()
@@ -58,8 +58,12 @@ public class Ghost : MonoBehaviour
         GameObject MusicControllerObject = GameObject.FindGameObjectWithTag("Music Controller");
         if (MusicControllerObject != null)
         {
-             MCScript = MusicControllerObject.GetComponent<MusicController>();
-
+            MCScript = MusicControllerObject.GetComponent<MusicController>();
+            if (!MCScript.GhostEnabled.Value)
+            {
+                Pump.SetActive(false);
+                gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            }
             if (MCScript.BestTimes[SceneIndex] == 0)
             {
                 //GhostPathSaved = GhostPathPar;
@@ -76,7 +80,8 @@ public class Ghost : MonoBehaviour
     }
     void Update()
     {
-        if (timer.TimerActive && !GhostHasStarted && GameObject.FindGameObjectWithTag("Music Controller") != null)
+        GameObject MC = GameObject.FindGameObjectWithTag("Music Controller");
+        if (timer.TimerActive && !GhostHasStarted && MC != null && MC.GetComponent<MusicController>().GhostEnabled.Value)
         {
 
             RunGhost = true;

@@ -194,7 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e81b9e01b87cb94e8ac43b15447a4b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ghost
+  GhostPathNew: []
   PointsPerSecond: 30
-  ParRuns: {fileID: 11400000, guid: 410b0267a9174814591e7b76c36d8647, type: 2}
-  y: 5
-  g: 6
+  Pump: {fileID: 6942732690322238224}

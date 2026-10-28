@@ -80,9 +80,10 @@ public class LevelController : MonoBehaviour
 
         if (Endless)
         {
+            Debug.Log("endless");
             StartCoroutine(EndlessSpawn());
         }
-        else
+        else if (GameObject.FindGameObjectWithTag("Ghost") != null)
         {
             ghost = GameObject.FindGameObjectWithTag("Ghost").GetComponent<Ghost>();
         }
@@ -171,6 +172,7 @@ public class LevelController : MonoBehaviour
         {
             if (timer.TimerActive)
             {
+                Debug.Log("Timer");
                 yield return new WaitForSecondsRealtime(SpawnIntervalTime / 2);
 
                 int[] SpawnIndexes = new int[SpawnAmount];
@@ -195,7 +197,7 @@ public class LevelController : MonoBehaviour
                         i++;
                     }
                     //breaks to stop game from freezing if loop runs over 100 times
-                    if (x > 100)
+                    if (x > 1000)
                     {
                         Debug.LogError("For Loop Overload Error: Endless Spawn");
                         break;
@@ -218,7 +220,8 @@ public class LevelController : MonoBehaviour
                     }
                     if (!DontSpawn)
                     {
-                        Instantiate(Agent, Location.position, Location.rotation);
+                        GameObject agent = Instantiate(Agent, Location.position, Location.rotation);
+                        agent.SetActive(true);
                     }
                 }
                 yield return new WaitForSecondsRealtime(SpawnIntervalTime / 2);

@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     private GameObject DeathScreen;
     private AudioSource GunShotAudio;
     private Rigidbody2D rb;
-    private GameObject MainCamera; private readonly int PixelsPerUnit = 32;
+    private GameObject MainCamera; private readonly int PixelsPerUnit = 8;
     private Animator animator;
 
     private LevelController levelController;
@@ -93,8 +93,8 @@ public class Player : MonoBehaviour
 
         //Moves camera to player (causes jittering if not first)
         Vector3 CameraPosition = Camera.main.transform.position;
-        CameraPosition.x = Mathf.Round(gameObject.transform.position.x * PixelsPerUnit) / PixelsPerUnit;
-        CameraPosition.y = Mathf.Round(gameObject.transform.position.y * PixelsPerUnit) / PixelsPerUnit;
+        CameraPosition.x = (int)Mathf.Round(gameObject.transform.position.x * PixelsPerUnit) / PixelsPerUnit;
+        CameraPosition.y = (int)Mathf.Round(gameObject.transform.position.y * PixelsPerUnit) / PixelsPerUnit;
         CameraPosition.z = -10;
 
         //MainCamera.transform.position = CameraPosition;

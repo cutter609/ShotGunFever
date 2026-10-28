@@ -18,13 +18,21 @@ public class MainMenu : MonoBehaviour
     public GameObject QuitButton;
     public AudioMixer AudioMixer;
     public UnityEngine.UI.Slider Slider;
+    public UnityEngine.UI.Toggle Toggle;
 
     public TextMeshProUGUI[] BestTimesTextObjects;
+
+    public MusicController musicController;
 
     private void Awake()
     {
         AudioMixer.GetFloat("Master", out float DecibelLevel);
         Slider.value = Mathf.Pow(10, DecibelLevel / 20);
+        musicController = GameObject.FindGameObjectWithTag("Music Controller").GetComponent<MusicController>();
+        if (musicController.GhostEnabled != null)
+        {
+            Toggle.isOn = musicController.GhostEnabled.Value;
+        }
 
         StartCoroutine(SpawnAgent());
 
@@ -34,7 +42,7 @@ public class MainMenu : MonoBehaviour
         }
 
         GameObject times = GameObject.FindGameObjectWithTag("Music Controller");
-        float[] BestTimesFloat = times.GetComponent<MusicController>().BestTimes;
+        float[] BestTimesFloat = musicController.BestTimes;
         for (int i = 0; i < BestTimesFloat.Length; i++)
         {
             if (BestTimesTextObjects[i] != null)
@@ -50,6 +58,10 @@ public class MainMenu : MonoBehaviour
     public void Quit()
     {
         UnityEngine.Application.Quit();
+    }
+    public void EnableGhost(bool isOn)
+    {
+        musicController.GhostEnabled = isOn;
     }
     public void SetVolumeMaster(float volume)
     {

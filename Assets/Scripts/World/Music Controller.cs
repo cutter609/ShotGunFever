@@ -11,6 +11,7 @@ public class MusicController : MonoBehaviour
     public AudioSource Level;
 
     public float[] BestTimes;
+    public bool? GhostEnabled = true;
 
     public List<Ghost.GhostPoint>[] SceneGhostPaths;
 
