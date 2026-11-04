@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,8 @@ public class UI : MonoBehaviour
     public GameObject WinScreen;
     public GameObject DeathScreen;
     public GameObject PauseScreen;
+
+    public TextMeshProUGUI PBText;
 
     private LevelController levelController;
     private Player player;

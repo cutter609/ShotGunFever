@@ -10,7 +10,7 @@ public class LevelController : MonoBehaviour
 {
     private float temptime;
     [Header("Enemies")]
-    public float AliveEnemyTimePenalty = 3;
+    public float AliveEnemyTimePenalty = 3; //seconds
 
     [HideInInspector] public int EnemyCount;
     private GameObject EnemyFolder;
@@ -32,6 +32,7 @@ public class LevelController : MonoBehaviour
     private float PositionChangeToStartTimer = 0.1f;
     private float TilemapHue;
     public Color TileMapColor;
+
 
 
     [Space(15)]
@@ -149,6 +150,14 @@ public class LevelController : MonoBehaviour
                 if (timer.ClockTime > PreviousBestTime)
                 {
                     MusicControllerScript.BestTimes[SceneIndex] = timer.ClockTime;
+                    if (PreviousBestTime != 0)
+                    {
+                        UIObject.PBText.text = "Previous Best: " + TimeToString(PreviousBestTime);
+                    }
+                }
+                else
+                {
+                    UIObject.PBText.text = "Time to Beat: " + TimeToString(PreviousBestTime);
                 }
             }
             Endless = false;
@@ -172,7 +181,6 @@ public class LevelController : MonoBehaviour
         {
             if (timer.TimerActive)
             {
-                Debug.Log("Timer");
                 yield return new WaitForSecondsRealtime(SpawnIntervalTime / 2);
 
                 int[] SpawnIndexes = new int[SpawnAmount];
@@ -256,6 +264,18 @@ public class LevelController : MonoBehaviour
                     MusicControllerScript.SceneGhostPaths[SceneIndex] = ghost.GhostPathNew;
                     Debug.Log("Time and ghost updated");
                 }
+                if (timer.ClockTime < PreviousBestTime && PreviousBestTime != 0)
+                {
+                    UIObject.PBText.text = "Previous Best: " + TimeToString(PreviousBestTime);
+                }
+                else if (timer.ClockTime > PreviousBestTime && PreviousBestTime != 0)
+                {
+                    UIObject.PBText.text = "Time to Beat: " + TimeToString(PreviousBestTime);
+                }
+                else
+                {
+                    UIObject.PBText.text = "";
+                }
             }
         }
     }
@@ -284,5 +304,27 @@ public class LevelController : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         Time.fixedDeltaTime = DefaultDeltatime;
+    }
+    public void DisplayTimeToBeat()
+    {
+        if (GameObject.FindGameObjectWithTag("Music Controller") != null)
+        {
+
+        }
+    }
+    string TimeToString(float time)
+    {
+        int[] digits = new int[6];
+
+        float minutes = (int)(time / 60);
+        digits[0] = ((int)(minutes / 10));
+        digits[1] = ((int)(minutes % 10));
+        float seconds = (int)(time % 60);
+        digits[2] = ((int)(seconds / 10));
+        digits[3] = ((int)(seconds % 10));
+
+        digits[4] = ((int)((time - (int)time) * 10));
+        digits[5] = (((int)((time - (int)time) * 100)) % 10);
+        return digits[0].ToString() + digits[1].ToString() + ":" + digits[2].ToString() + digits[3].ToString() + ":" + digits[4].ToString() + digits[5].ToString();
     }
 }
