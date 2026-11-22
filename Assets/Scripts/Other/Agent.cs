@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,6 +45,8 @@ public class Agent : MonoBehaviour
     public Transform SecondHandPoint;
     public Transform GunPoint;
     public GameObject Gun;
+
+    public List<Collider2D> ColliderList;
 
 
     [Space(15)]
@@ -96,6 +100,15 @@ public class Agent : MonoBehaviour
         if (InMainMenu)
         {
             StartCoroutine(MainMenuTargeting());
+        }
+
+        //ignores collision of an agents body parts with its other body parts but not other agents
+        for (int i = 0; i < ColliderList.Count; i++)
+        {
+            for (int j = i + 1; j < ColliderList.Count; j++)
+            {
+                Physics2D.IgnoreCollision(ColliderList[i], ColliderList[j], true);
+            }
         }
     }
 

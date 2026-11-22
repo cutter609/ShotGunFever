@@ -15,6 +15,9 @@ public class MainMenu : MonoBehaviour
     public GameObject Agent;
     public int MaxSpin = 50;
 
+    public Rigidbody2D SliderHandleHitBox;
+    public Transform SliderHandle;
+
     public GameObject QuitButton;
     public AudioMixer AudioMixer;
     public UnityEngine.UI.Slider Slider;
@@ -50,6 +53,10 @@ public class MainMenu : MonoBehaviour
                 BestTimesTextObjects[i].text = FloatToTime(BestTimesFloat[i]);
             }
         }
+    }
+    private void Update()
+    {
+        SliderHandleHitBox.MovePosition(SliderHandle.position);
     }
     public void LoadLevel(int SceneIndex)
     {
@@ -100,7 +107,9 @@ public class MainMenu : MonoBehaviour
             float Rotation = Random.Range(-MaxSpin, MaxSpin);
 
             GameObject AgentInstance = Instantiate(Agent, Position, Quaternion.Euler(0, 0, Rotation));
+            AgentInstance.SetActive(true);
             AgentInstance.GetComponentInChildren<Rigidbody2D>().AddTorque(Rotation);
+
 
             float DelayTime = Random.Range(MinSpawnDelay, MaxSpawnDelay);
             yield return new WaitForSeconds(DelayTime);

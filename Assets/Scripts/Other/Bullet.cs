@@ -36,7 +36,10 @@ public class Bullet : MonoBehaviour
         //ignores collision with other bullets
         Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
 
-        levelController = GameObject.FindGameObjectWithTag("World").GetComponent<LevelController>();
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            levelController = GameObject.FindGameObjectWithTag("World").GetComponent<LevelController>();
+        }
 
         StartCoroutine(DestroyAfterDelay());
     }

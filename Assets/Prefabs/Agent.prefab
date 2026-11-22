@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8924656003579115019}
   - component: {fileID: 5021812318322158799}
   - component: {fileID: 606663822047517076}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hand Left
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 5207567108856372155}
   - component: {fileID: 711730819884762391}
   - component: {fileID: 5399089102078755524}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8470587722220713084}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Fire Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 3796608056019940625}
   - component: {fileID: 6833032257827825431}
   - component: {fileID: 328020223511789018}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Fore Left
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -607,7 +607,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7998461462209742642}
   - component: {fileID: 2550763206670422344}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Torso Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 3186403098681329355}
   - component: {fileID: 7840534293902206407}
   - component: {fileID: 5953089458802734932}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Calf Left
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -914,7 +914,7 @@ GameObject:
   - component: {fileID: 6026172851585113372}
   - component: {fileID: 123142525394965966}
   - component: {fileID: 3149041609361404287}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Bic Left
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -1114,7 +1114,7 @@ GameObject:
   - component: {fileID: 3892056203703305674}
   - component: {fileID: 1973539180214960792}
   - component: {fileID: 3984301537659961109}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Fore Right
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -1317,7 +1317,7 @@ GameObject:
   - component: {fileID: 3936053051510626244}
   - component: {fileID: 6274383991304427884}
   - component: {fileID: 8184828092903767048}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Thigh Left
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -1524,7 +1524,7 @@ GameObject:
   - component: {fileID: 8378130009398271185}
   - component: {fileID: 126920659272241663}
   - component: {fileID: 1606592921101589107}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -1741,7 +1741,7 @@ GameObject:
   - component: {fileID: 4162514452936067549}
   - component: {fileID: 205914372330699140}
   - component: {fileID: 4643669499359504636}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Thigh Right
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -1945,7 +1945,7 @@ GameObject:
   - component: {fileID: 573906557438688463}
   - component: {fileID: 3337429971242596429}
   - component: {fileID: 2979546810943340631}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Agent
   m_TagString: Agent
   m_Icon: {fileID: 0}
@@ -2001,6 +2001,19 @@ MonoBehaviour:
   SecondHandPoint: {fileID: 6116264473662515990}
   GunPoint: {fileID: 6116264473662515990}
   Gun: {fileID: 467130483550524774}
+  ColliderList:
+  - {fileID: 4043366134077345532}
+  - {fileID: 2513823956829844760}
+  - {fileID: 6026172851585113372}
+  - {fileID: 5832236353324210324}
+  - {fileID: 3796608056019940625}
+  - {fileID: 1440231650239754339}
+  - {fileID: 3892056203703305674}
+  - {fileID: 7681357481048795779}
+  - {fileID: 7180236564550022533}
+  - {fileID: 1144325625851063677}
+  - {fileID: 3357155010447038961}
+  - {fileID: 5399089102078755524}
   ReTargetTime: 3
   LaunchSpeed: 1000
   MaxSideSpeed: 200
@@ -2117,7 +2130,7 @@ GameObject:
   - component: {fileID: 5832236353324210324}
   - component: {fileID: 4162561450778114601}
   - component: {fileID: 531200825085463249}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Bic Right
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -2317,7 +2330,7 @@ GameObject:
   - component: {fileID: 4043366134077345532}
   - component: {fileID: 5955185047663174303}
   - component: {fileID: 7353672089515601502}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Torso
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -2515,7 +2528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6116264473662515990}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Second Hand Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2551,7 +2564,7 @@ GameObject:
   - component: {fileID: 1701423682343420936}
   - component: {fileID: 40619136193060561}
   - component: {fileID: 7921335634373808507}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Calf Right
   m_TagString: Agent Limb
   m_Icon: {fileID: 0}
@@ -2761,7 +2774,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6348073957129683859}
   - component: {fileID: 506353849259605461}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
