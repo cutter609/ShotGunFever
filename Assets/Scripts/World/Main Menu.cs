@@ -10,9 +10,11 @@ public class MainMenu : MonoBehaviour
 {
     [Header("Objects")]
     public float MinSpawnDelay = 0.5f;
-    public float MaxSpawnDelay = 4.0f;
+    public float MaxSpawnDelay = 2.5f;
 
     public GameObject Agent;
+    public GameObject Barrel;
+    public float BarrelChance = 40; //percent chance
     public int MaxSpin = 50;
 
     public Rigidbody2D SliderHandleHitBox;
@@ -29,6 +31,9 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = -1;
+        Time.fixedDeltaTime = (1.0f / 200.0f) * Time.timeScale;
+
         AudioMixer.GetFloat("Master", out float DecibelLevel);
         Slider.value = Mathf.Pow(10, DecibelLevel / 20);
         musicController = GameObject.FindGameObjectWithTag("Music Controller").GetComponent<MusicController>();
@@ -106,13 +111,26 @@ public class MainMenu : MonoBehaviour
             Vector2 Position = new Vector2(Random.Range(-CameraSize, CameraSize), Camera.main.orthographicSize + 5);
             float Rotation = Random.Range(-MaxSpin, MaxSpin);
 
-            GameObject AgentInstance = Instantiate(Agent, Position, Quaternion.Euler(0, 0, Rotation));
-            AgentInstance.SetActive(true);
-            AgentInstance.GetComponentInChildren<Rigidbody2D>().AddTorque(Rotation);
-
+            if (Random.Range(0, 100) < BarrelChance)
+            {
+                GameObject BarrelInstance = Instantiate(Barrel, Position, Quaternion.Euler(0, 0, Rotation));
+                BarrelInstance.SetActive(true);
+                BarrelInstance.GetComponentInChildren<Rigidbody2D>().AddTorque(Rotation);
+            }
+            else
+            {
+                GameObject AgentInstance = Instantiate(Agent, Position, Quaternion.Euler(0, 0, Rotation));
+                AgentInstance.SetActive(true);
+                AgentInstance.GetComponentInChildren<Rigidbody2D>().AddTorque(Rotation);
+            }
 
             float DelayTime = Random.Range(MinSpawnDelay, MaxSpawnDelay);
             yield return new WaitForSeconds(DelayTime);
         }
+    }
+    public void SetFrameRate(string String)
+    {
+        int fps = int.Parse(String);
+        Application.targetFrameRate = fps;
     }
 }

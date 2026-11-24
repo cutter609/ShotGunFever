@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +16,11 @@ public class MusicController : MonoBehaviour
     public bool? GhostEnabled = true;
 
     public List<Ghost.GhostPoint>[] SceneGhostPaths;
+
+    public TextMeshProUGUI FPS;
+    private const int ArrayLength = 100;
+    private double[] FPSArray = new double[ArrayLength];
+    private int ArrayIndex = 0;
 
 
     void Awake()
@@ -31,6 +38,8 @@ public class MusicController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        StartCoroutine(FPSCounter());
     }
     private void Update()
     {
@@ -44,6 +53,31 @@ public class MusicController : MonoBehaviour
             MainMenu.enabled = false;
             Level.enabled = true;
         }
+
+        if (ArrayIndex > ArrayLength - 1)
+        {
+            ArrayIndex -= ArrayLength;
+        }
+        FPSArray[ArrayIndex] = 1.0f / Time.unscaledDeltaTime;
+        ArrayIndex++;
     }
 
+    IEnumerator FPSCounter()
+    {
+        while (true)
+        {
+            FPS.text = ((int)ArrayAverage(FPSArray)).ToString();
+            yield return new WaitForSeconds(1);
+        }
+    }
+    double ArrayAverage(double[] array)
+    {
+        double avg = 0;
+        int count = array.Length;
+        for (int i = 0; i < count; ++i)
+        {
+            avg += array[i];
+        }
+        return avg / count;
+    }
 }

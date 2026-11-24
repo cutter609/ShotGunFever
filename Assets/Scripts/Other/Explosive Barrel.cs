@@ -1,24 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExplosiveBarrel : MonoBehaviour
 {
+    public float DamagePerLimb = 2.0f;
     public float ExplosionDistance = 12.0f;
     public float ExplosionForce = 42.0f;
     public float SlowModeForceMultiplier = 3.2f;
+    public float BarrelPushMult = 5.0f;
 
-    public AudioSource Sound;
+    public ParticleSystem Particles1;
+    public ParticleSystem Particles2;
 
-
-    private bool Exploded = false;
-    private bool Playing = false;
     private float SlowModeForceMultiplierChanging;
 
-    [HideInInspector] public bool DelayedExplode;
-    private int WaitForFrames = 5;
+    private bool InMainMenu = false;
+    public bool Exploded = false;
 
+    public float ExplodeDelayTimeMin = 0.1f;
+    public float ExplodeDelayTimeMax = 0.5f;
+    private float ExplodeDelayTime;
+
+    private float ExplodeTime = 0.0f;
+
+    private void Awake()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            InMainMenu = true;
+        }
+        ExplodeDelayTime = UnityEngine.Random.Range(ExplodeDelayTimeMin, ExplodeDelayTimeMax);
+    }
     private void Update()
     {
         if (Time.timeScale == 1)
@@ -30,23 +43,12 @@ public class ExplosiveBarrel : MonoBehaviour
             SlowModeForceMultiplierChanging = SlowModeForceMultiplier;
         }
 
-        if (DelayedExplode)
+        if (ExplodeTime != 0.0f && ExplodeTime + ExplodeDelayTime < Time.time)
         {
-            WaitForFrames -= 1;
-            if (WaitForFrames == 0)
-            {
-                Explode();
-            }
+            Explode();
         }
 
-        if (Exploded)
-        {
-            Sound.Play();
-            Playing = true;
-            gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            Exploded = false;
-        }
-        if (!Sound.isPlaying && Playing)
+        if (InMainMenu && transform.position.y < -25.0f)
         {
             Destroy(gameObject);
         }
@@ -59,25 +61,18 @@ public class ExplosiveBarrel : MonoBehaviour
         GameObject[] Limbs = GameObject.FindGameObjectsWithTag("Agent Limb");
         GameObject[] Barrels = GameObject.FindGameObjectsWithTag("Barrel");
 
-        float PlayerDistance = Vector2.Distance(Player.transform.position, gameObject.transform.position);
-        if (PlayerDistance < ExplosionDistance)
+        float PlayerDistance = 0;
+        if (Player != null)
+        {
+            PlayerDistance = Vector2.Distance(Player.transform.position, gameObject.transform.position);
+        }
+        if (PlayerDistance < ExplosionDistance && PlayerDistance != 0)
         {
             Rigidbody2D Playerrb = Player.GetComponent<Rigidbody2D>();
             Vector2 ForceDirection = Player.transform.position - gameObject.transform.position;
 
             Playerrb.AddForce(ForceDirection.normalized * ExplosionForce * SlowModeForceMultiplierChanging
                                 * ((ExplosionDistance - PlayerDistance) / ExplosionDistance));
-        }
-
-        foreach (GameObject Agent in Agents)
-        {
-            float Distance = Vector2.Distance(Agent.transform.position, gameObject.transform.position);
-
-            if (Distance < ExplosionDistance)
-            {
-                Agent AgentScript = Agent.GetComponent<Agent>();
-                AgentScript.Health = 0;
-            }
         }
         
         foreach (GameObject Limb in Limbs)
@@ -90,19 +85,41 @@ public class ExplosiveBarrel : MonoBehaviour
                 Vector2 ForceDirection = Limb.transform.position - gameObject.transform.position;
                 Limbrb.AddForce(ForceDirection.normalized * ExplosionForce * SlowModeForceMultiplierChanging
                                 * ((ExplosionDistance - Distance) / ExplosionDistance));
+
+                Limb.GetComponentInParent<Agent>().Health -= (ExplosionDistance - Distance) * DamagePerLimb;
             }
         }
         
         foreach (GameObject Barrel in Barrels)
         {
             float Distance = Vector2.Distance(Barrel.transform.position, gameObject.transform.position);
-            if (Distance < ExplosionDistance)
+            if (Distance < ExplosionDistance && Distance > 0.1f)
             {
-                Barrel.GetComponent<ExplosiveBarrel>().DelayedExplode = true;
+                Rigidbody2D Barrelrb = Barrel.GetComponent<Rigidbody2D>();
+
+                Vector2 ForceDirection = Barrel.transform.position - gameObject.transform.position;
+                Barrelrb.AddForce(ForceDirection.normalized * ExplosionForce * SlowModeForceMultiplierChanging * BarrelPushMult
+                                * ((ExplosionDistance - Distance) / ExplosionDistance));
+
+                ExplosiveBarrel BarrelScript = Barrel.GetComponent<ExplosiveBarrel>();
+                if (BarrelScript.ExplodeTime == 0)
+                {
+                    BarrelScript.ExplodeTime = Time.time;
+                }
             }
         }
 
-        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        Instantiate(Particles1, gameObject.transform.position, gameObject.transform.rotation);
+        Instantiate(Particles2, gameObject.transform.position, gameObject.transform.rotation);
+        Destroy(gameObject);
         Exploded = true;
+    }
+    // explodes on click in main menu
+    void OnMouseDown()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0 && !Exploded)
+        {
+            Explode();
+        }
     }
 }

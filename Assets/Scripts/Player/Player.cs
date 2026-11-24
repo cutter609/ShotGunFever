@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour
 
     [HideInInspector] public bool SlowActive;
 
+    public AudioMixer AudioMixer;
 
 
     [Space(15)]
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour
     public int BulletCount           = 5;
     public float BulletSpread        = 2;
     public Volume EffectVolume;
+    public float PitchMult           = 0.4f;
 
 
 
@@ -56,6 +59,8 @@ public class Player : MonoBehaviour
     private UI UIObject;
 
     public bool WaitForThreeFrames = false;
+
+    public float FixedFPS = 50.0f;
 
     private void Awake()
     {
@@ -87,6 +92,31 @@ public class Player : MonoBehaviour
         }
         OverLappingColliders.Remove(collision);
     }
+    private void FixedUpdate()
+    {
+        Time.fixedDeltaTime = (1.0f / FixedFPS) * Time.timeScale;
+
+        //rotates gun to mouse
+        if (!IsGrounded && !Dead && !Paused && WaitForThreeFrames)
+        {
+            Vector2 mousepositionworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = new Vector2(mousepositionworld.x - gameObject.transform.position.x,
+                                            mousepositionworld.y - gameObject.transform.position.y);
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            
+            if (InAir)
+            {
+                float t = 1.0f - Mathf.Exp(-RotateForceAir * Time.fixedDeltaTime);
+                rb.MoveRotation(Mathf.LerpAngle(rb.rotation, angle, t));
+            }
+            else
+            {
+                float t = 1.0f - Mathf.Exp(-RotateForceGround * Time.fixedDeltaTime);
+                rb.MoveRotation(Mathf.LerpAngle(rb.rotation, angle, t));
+            }
+        }
+    }
     void Update()
     {
         IsGrounded = OverLappingColliders.Count > 0;
@@ -104,6 +134,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && !Dead && !Paused)
             { rb.AddForce(Vector2.up * JumpHeight); }
 
+        /*
         //rotates gun to mouse
         if (!IsGrounded && !Dead && !Paused && WaitForThreeFrames)
         {
@@ -121,7 +152,7 @@ public class Player : MonoBehaviour
                 rb.MoveRotation(Mathf.LerpAngle(rb.rotation, angle, RotateForceGround * Time.deltaTime));
             }
         }
-
+        */
 
         //flips gun by changing y-scale so it is always upright
         if (gameObject.transform.rotation.eulerAngles.z <= 90 || gameObject.transform.rotation.eulerAngles.z >= 270)
@@ -135,11 +166,10 @@ public class Player : MonoBehaviour
             if (runonce1)
             {
                 Time.timeScale = TimeScale;
-                Time.fixedDeltaTime = 0.02f * Time.timeScale;
-                GunShotAudio.pitch = 0.4f;
                 JumpHeight /= TimeScale;
                 runonce1 = false;
                 SlowActive = true;
+                AudioMixer.SetFloat("SFX Pitch", PitchMult);
             }
             if (EffectVolume.weight < 1)
                 { EffectVolume.weight += SlowEffectSpeed * Time.deltaTime; }
@@ -152,12 +182,11 @@ public class Player : MonoBehaviour
                 if (!Paused)
                 {
                     Time.timeScale = 1;
-                    Time.fixedDeltaTime = 0.02f * Time.timeScale;
                 }
-                GunShotAudio.pitch = 1;
                 JumpHeight *= TimeScale;
                 SlowActive = false;
                 runonce2 = false;
+                AudioMixer.SetFloat("SFX Pitch", 1.0f);
             }
             if (EffectVolume.weight > 0)
                 { EffectVolume.weight -= SlowEffectSpeed * Time.deltaTime; }
@@ -169,7 +198,6 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             Time.timeScale = 1;
-            Time.fixedDeltaTime = 0.02f * Time.timeScale;
         }
     }
 
@@ -181,14 +209,11 @@ public class Player : MonoBehaviour
             UIObject.DeathScreen.SetActive(true);
             StartCoroutine(ResetMouseCursor());
         }
-
     }
     private void PlayAudioRandomPitch(AudioSource audio)
     {
-        float CurrentPitch = audio.pitch;
-        audio.pitch = CurrentPitch + Random.Range(-0.05f, 0.05f);
+        audio.pitch = Random.Range(0.95f, 1.05f);
         audio.Play();
-        audio.pitch = CurrentPitch;
     }
     //allows triggers to detect colliders so player doesn't immediatly rotate on load
     IEnumerator WaitForFrames()
@@ -239,7 +264,6 @@ public class Player : MonoBehaviour
                 {
                     GameObject BulletObject = Instantiate(Bullet, FirePoint.position, Quaternion.Euler(0, 0, FirePoint.rotation.eulerAngles.z
                                                          + (BulletCount - 1) / 2 * BulletSpread - i * BulletSpread));
-                    //BulletObject.GetComponent<Bullet>().SpawnSource = "Player";
                     Physics2D.IgnoreCollision(BulletObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
                 }
                 PlayAudioRandomPitch(GunShotAudio);

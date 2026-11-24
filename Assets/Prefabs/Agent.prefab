@@ -900,7 +900,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRotation: 0
-  RotateForce: 125
 --- !u!1 &4386444357684054260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,7 +1508,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRotation: 0
-  RotateForce: 125
 --- !u!1 &6459933470587393810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1726,7 +1724,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRotation: 0
-  RotateForce: 125
 --- !u!1 &6828007051506046193
 GameObject:
   m_ObjectHideFlags: 0
@@ -1933,7 +1930,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRotation: 0
-  RotateForce: 125
 --- !u!1 &6961603805275594552
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,7 +1947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &573906557438688463
 Transform:
   m_ObjectHideFlags: 0
@@ -1986,13 +1982,13 @@ MonoBehaviour:
   TargetingDelayTime: 1
   ShootingDelay: 1
   AgentGrounded: 0
+  BalaceRotateForce: 5
   ShootingArmRb1: {fileID: 4162561450778114601}
   ShootingArmRb2: {fileID: 1973539180214960792}
-  ArmRotateForce: 500
+  ArmRotateForce: 10
   AngleAdjustment: 23
   LeftSideMulitplier: 0.7
   AngleShootRange: 15
-  GunShotAudio: {fileID: 0}
   Head: {fileID: 6459933470587393810}
   Torso: {fileID: 7640786425416257359}
   ForeLeft: {fileID: 328020223511789018}
@@ -2015,9 +2011,9 @@ MonoBehaviour:
   - {fileID: 3357155010447038961}
   - {fileID: 5399089102078755524}
   ReTargetTime: 3
-  LaunchSpeed: 1000
-  MaxSideSpeed: 200
-  MaxTorque: 50
+  LaunchSpeed: 4000
+  MaxSideSpeed: 1600
+  MaxTorque: 1000
   Bullet: {fileID: 5858670485435575731, guid: a75571ea4f6338e428ac700339ea94d6, type: 3}
   FirePoint: {fileID: 8470587722220713084}
 --- !u!82 &2979546810943340631
@@ -2029,7 +2025,7 @@ AudioSource:
   m_GameObject: {fileID: 6961603805275594552}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: e0227a65e662f0648a4f1c9a02db13b9, type: 2}
+  OutputAudioMixerGroup: {fileID: -3688610942717590357, guid: e0227a65e662f0648a4f1c9a02db13b9, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 44cfef87666fff14fb185f2b0841ad59, type: 3}
   m_PlayOnAwake: 0
@@ -2518,7 +2514,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRotation: 0
-  RotateForce: 500
 --- !u!1 &7787443660112592259
 GameObject:
   m_ObjectHideFlags: 0
@@ -2763,7 +2758,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRotation: 0
-  RotateForce: 125
 --- !u!1 &9147920787570068533
 GameObject:
   m_ObjectHideFlags: 0

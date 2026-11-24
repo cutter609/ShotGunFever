@@ -3,9 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class AgentBalance : MonoBehaviour
 {
-    public float TargetRotation;
+    [HideInInspector] public float TargetRotation;
     private Rigidbody2D rb;
-    public float RotateForce = 150; //limbs and head 150, Torso 600
+    //public float RotateForce = 150; //limbs and head 150, Torso 600
 
     private Agent Agent;
 
@@ -15,11 +15,13 @@ public class AgentBalance : MonoBehaviour
         Agent = gameObject.GetComponentInParent<Agent>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Agent.AgentGrounded)
         {
-            rb.MoveRotation(Mathf.LerpAngle(rb.rotation, TargetRotation, RotateForce * Time.deltaTime));
+            //rb.MoveRotation(Mathf.LerpAngle(rb.rotation, TargetRotation, Agent.BalaceRotateForce * Time.deltaTime));
+            float t = 1.0f - Mathf.Exp(-Agent.BalaceRotateForce * Time.fixedDeltaTime);
+            rb.MoveRotation(Mathf.LerpAngle(rb.rotation, TargetRotation, t));
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -39,7 +41,9 @@ public class AgentBalance : MonoBehaviour
         {
             float RandomSideSpeed = Random.Range(-Agent.MaxSideSpeed, Agent.MaxSideSpeed);
             float RandomTorque = Random.Range(-Agent.MaxTorque, Agent.MaxTorque);
-            gameObject.GetComponentInParent<Rigidbody2D>().AddForce(new Vector2(RandomSideSpeed, Agent.LaunchSpeed));
+            Rigidbody2D rb = gameObject.GetComponentInParent<Rigidbody2D>();
+            rb.AddForce(new Vector2(RandomSideSpeed, Agent.LaunchSpeed));
+            rb.AddTorque(RandomTorque);
         }
     }
 }

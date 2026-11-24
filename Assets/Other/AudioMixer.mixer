@@ -1,5 +1,38 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8369202508829750785
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: b4f9d09d496a43947ad6644e842c8f32
+  m_EffectName: Attenuation
+  m_MixLevel: 8291f3e7c1e97574d92708462316208a
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &-3688610942717590357
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SFX
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: b30c24d2d738872409e15f6b2f8b8a34
+  m_Children: []
+  m_Volume: 7eac999bd9f982848bfdfcf061070659
+  m_Pitch: b4ba377467c577549985aa07a5c8349f
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -8369202508829750785}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -18,9 +51,12 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 9e2478633e56bd543845e27869de07e7
     name: Master
+  - guid: b4ba377467c577549985aa07a5c8349f
+    name: SFX Pitch
   m_AudioMixerGroupViews:
   - guids:
     - 98b3953fe94b0134bb683eb8e336657c
+    - b30c24d2d738872409e15f6b2f8b8a34
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -33,7 +69,8 @@ AudioMixerGroupController:
   m_Name: Master
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 98b3953fe94b0134bb683eb8e336657c
-  m_Children: []
+  m_Children:
+  - {fileID: -3688610942717590357}
   m_Volume: 9e2478633e56bd543845e27869de07e7
   m_Pitch: ad146f1862215384c9db6f5b90663ba9
   m_Send: 00000000000000000000000000000000
@@ -68,4 +105,6 @@ AudioMixerSnapshotController:
   m_SnapshotID: ceb60bf732047d042b1294bf47377c50
   m_FloatValues:
     9e2478633e56bd543845e27869de07e7: -6.02
+    9746b935239003e48891f193a96c9879: 0.5
+    ad146f1862215384c9db6f5b90663ba9: 1
   m_TransitionOverrides: {}

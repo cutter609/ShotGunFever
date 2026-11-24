@@ -503,7 +503,7 @@ AudioSource:
   m_GameObject: {fileID: 5832899507971408371}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: e0227a65e662f0648a4f1c9a02db13b9, type: 2}
+  OutputAudioMixerGroup: {fileID: -3688610942717590357, guid: e0227a65e662f0648a4f1c9a02db13b9, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: e16b6d55d9afe4b4ba6bd1a949c21068, type: 3}
   m_PlayOnAwake: 0
@@ -629,23 +629,26 @@ MonoBehaviour:
   InAir: 0
   Dead: 0
   Paused: 0
-  JumpHeight: 95
-  RecoilPower: 80
+  JumpHeight: 380
+  RecoilPower: 320
   MaxSpeed: 10
-  RotateForceAir: 500
-  RotateForceGround: 50
+  RotateForceAir: 150
+  RotateForceGround: 10
   SlowActive: 0
+  AudioMixer: {fileID: 24100000, guid: e0227a65e662f0648a4f1c9a02db13b9, type: 2}
   FireDelay: 0.2
   SlowEffectSpeed: 20
   TimeScale: 0.25
   BulletCount: 5
   BulletSpread: 2
   EffectVolume: {fileID: 4926789310946941606}
+  PitchMult: 0.4
   Bullet: {fileID: 5858670485435575731, guid: a75571ea4f6338e428ac700339ea94d6, type: 3}
   Shell: {fileID: 227764801031375506, guid: 03e780a42fa12c5439ed75f8d0ce5578, type: 3}
   FirePoint: {fileID: 8436591095055123656}
   ShellSpawnPoint: {fileID: 5390185259148009274}
   WaitForThreeFrames: 0
+  FixedFPS: 200
 --- !u!1 &7785048015315459151
 GameObject:
   m_ObjectHideFlags: 0

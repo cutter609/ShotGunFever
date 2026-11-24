@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
     public int Damage            = 10;
     public int DestroyDelay      = 10;
 
+    public float PitchRange = 10;
+
     [Space(15)]
     [Header("Particles")]
     public ParticleSystem BloodParticles;
@@ -56,20 +58,24 @@ public class Bullet : MonoBehaviour
                 Hit.GetComponentInParent<Agent>().BulletHit(Damage);
                 MoveObject(Hit);
                 ParticleSystem ParticleAgent = Instantiate(BloodParticles, transform.position, transform.rotation);
-                PlayAudioRandomPitch(ParticleAgent.GetComponent<AudioSource>());
+                PlayAudioRandomPitch(ParticleAgent.GetComponent<AudioSource>(), PitchRange);
                 break;
             case "Button":
                 Hit.GetComponent<Button>().Activate();
                 break;
             case "Barrel":
-                Hit.GetComponent<ExplosiveBarrel>().Explode();
+                ExplosiveBarrel BarrelScript = Hit.GetComponent<ExplosiveBarrel>();
+                if (!BarrelScript.Exploded)
+                {
+                    BarrelScript.Explode();
+                }
                 break;
             case "Ground":
                 float zRotation = Mathf.Atan2(collision.contacts[0].normal.y, collision.contacts[0].normal.x) * Mathf.Rad2Deg;
                 ParticleSystem ParticleGround = Instantiate(GroundHitParticles, transform.position, Quaternion.Euler(0, 0, zRotation - 90));
                 var main = ParticleGround.main;
                 main.startColor = levelController.TileMapColor;
-                PlayAudioRandomPitch(ParticleGround.GetComponent<AudioSource>());
+                PlayAudioRandomPitch(ParticleGround.GetComponent<AudioSource>(), PitchRange);
                 break;
         }
         Rigidbody2D Hitrb = Hit.GetComponent<Rigidbody2D>();
@@ -89,11 +95,10 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSeconds(DestroyDelay);
         Destroy(gameObject);
     }
-    private void PlayAudioRandomPitch(AudioSource audio)
+    private void PlayAudioRandomPitch(AudioSource audio, float range)
     {
-        float CurrentPitch = audio.pitch;
-        audio.pitch = CurrentPitch + Random.Range(-0.05f, 0.05f);
+        range /= 100;
+        audio.pitch = Random.Range(1 - range, 1 + range);
         audio.Play();
-        audio.pitch = CurrentPitch;
     }
 }

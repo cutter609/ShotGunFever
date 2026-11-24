@@ -9,7 +9,7 @@ public class Agent : MonoBehaviour
     public bool StartFacingLeft = false;
 
     [Header("Agent")]
-    public int Health                   = 50;
+    public float Health                 = 50.0f;
     public int DetectionDistance        = 30;
     public float TargetingDelayTime     = 1;
     public float ShootingDelay          = 1;
@@ -21,6 +21,7 @@ public class Agent : MonoBehaviour
 
     [Space(15)]
     [Header("Shooting")]
+    public float BalaceRotateForce      = 75.0f;
     public Rigidbody2D ShootingArmRb1;
     public Rigidbody2D ShootingArmRb2;
     public float ArmRotateForce         = 500;
@@ -30,7 +31,7 @@ public class Agent : MonoBehaviour
 
     public int AngleShootRange          = 15;
 
-    public AudioSource GunShotAudio;
+    private AudioSource GunShotAudio;
 
 
 
@@ -112,7 +113,7 @@ public class Agent : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Health > 0)
         {
@@ -203,38 +204,28 @@ public class Agent : MonoBehaviour
     {
         Health -= Damage;
     }
-    /*
-    IEnumerator MoveRight(float Seconds)
-    {
-        LeftLegRb.AddForce(Vector2.right * Speed * Time.deltaTime);
-        yield return new WaitForSeconds(Seconds);
-        RightLegRb.AddForce(Vector2.right * Speed * Time.deltaTime);
-    }
-    IEnumerator MoveLeft(float Seconds)
-    {
-        RightLegRb.AddForce(Vector2.left * Speed * Time.deltaTime);
-        yield return new WaitForSeconds(Seconds);
-        LeftLegRb.AddForce(Vector2.left * Speed * Time.deltaTime);
-    }
-    */
+
     IEnumerator MainMenuTargeting()
     {
         while (Health > 0 && InMainMenu)
         {
             GameObject[] AgentsList = GameObject.FindGameObjectsWithTag("Agent");
             float MinDistance = DetectionDistance;
-            int ClosestIndex = 0;
+            int ClosestIndex = -1;
             for (int i = 0; i < AgentsList.Length; i++)
             {
                 float Distance = Vector2.Distance(AgentsList[i].transform.GetChild(0).gameObject.transform.position, Head.transform.position);
-                if (Distance < MinDistance && Distance > 2)
+                if (Distance < MinDistance && Distance > 2 && AgentsList[i].GetComponent<Agent>().Health > 0)
                 {
                     MinDistance = Distance;
                     ClosestIndex = i;
                 }
             }
-
-            Player = AgentsList[ClosestIndex].transform.GetChild(0).gameObject;
+            
+            if (ClosestIndex != -1)
+            {
+                Player = AgentsList[ClosestIndex].transform.GetChild(0).gameObject;
+            }
 
             yield return new WaitForSeconds(ReTargetTime);
         }
