@@ -40,6 +40,16 @@ public class Player : MonoBehaviour
     public float PitchMult           = 0.4f;
 
 
+    [Space(15)]
+    [Header("Audio")]
+    public AudioSource GunShotAudio;
+
+    public List<GameObject> GrindingObjects = new List<GameObject>();
+    public float MinGrindingSpeed = 1.0f;
+    public float MaxGrindingSpeed = 15.0f;
+    public float MinGrindingVolume = 0.1f;
+    public float MaxGrindingVolume = 1.0f;
+
 
     [Space(15)]
     [Header("Objects")]
@@ -50,7 +60,7 @@ public class Player : MonoBehaviour
     public Transform ShellSpawnPoint;
 
     private GameObject DeathScreen;
-    private AudioSource GunShotAudio;
+
     private Rigidbody2D rb;
     private GameObject MainCamera; private readonly int PixelsPerUnit = 8;
     private Animator animator;
@@ -68,7 +78,7 @@ public class Player : MonoBehaviour
         UIObject = GameObject.FindGameObjectWithTag("UI").GetComponent<UI>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         MainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        GunShotAudio = gameObject.GetComponent<AudioSource>();
+        //GunShotAudio = gameObject.GetComponent<AudioSource>();
         animator = gameObject.GetComponent<Animator>();
 
         StartCoroutine(WaitForFrames());
@@ -198,6 +208,43 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             Time.timeScale = 1;
+        }
+
+        //grinding sound effect
+        if (IsGrounded && !Dead && Mathf.Abs(rb.linearVelocityX) > MinGrindingSpeed && Time.timeScale > 0)
+        {
+            for (int i = 0; i < GrindingObjects.Count; ++i)
+            {
+                GrindingObjects[i].SetActive(true);
+
+                //sets color of grinding particles
+                ParticleSystem par = GrindingObjects[i].GetComponent<ParticleSystem>();
+                var main = par.main;
+                main.startColor = levelController.TileMapColor;
+            }
+            if (Mathf.Abs(rb.linearVelocityX) >= MaxGrindingSpeed)
+            {
+                GrindingObjects[0].GetComponent<AudioSource>().volume = MaxGrindingVolume;
+            }
+            else
+            {
+                GrindingObjects[0].GetComponent<AudioSource>().volume =
+                    (Mathf.Abs(rb.linearVelocityX) - MinGrindingSpeed) / (MaxGrindingSpeed - MinGrindingSpeed)
+                    * (MaxGrindingVolume - MinGrindingVolume) + MinGrindingVolume;
+            }
+            for (int i = 0; i < GrindingObjects.Count; ++i)
+            {
+                int looking = (int)gameObject.transform.localScale.y;// -1 if looking left, 1 if looking right
+                int moving = (int)(rb.linearVelocityX / Mathf.Abs(rb.linearVelocityX)); //-1 if moving left, 1 if moving right
+                GrindingObjects[i].transform.localScale = new Vector3(looking * moving, looking, 1); //accounts for flipping and rotating so particles always spray in the right direction
+            }
+        }
+        else
+        {
+            for (int i = 0; i < GrindingObjects.Count; ++i)
+            {
+                GrindingObjects[i].SetActive(false);
+            }
         }
     }
 

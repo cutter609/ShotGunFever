@@ -81,7 +81,6 @@ public class LevelController : MonoBehaviour
 
         if (Endless)
         {
-            Debug.Log("endless");
             StartCoroutine(EndlessSpawn());
         }
         else if (GameObject.FindGameObjectWithTag("Ghost") != null)
@@ -262,7 +261,6 @@ public class LevelController : MonoBehaviour
                 {
                     MusicControllerScript.BestTimes[SceneIndex] = timer.ClockTime;
                     MusicControllerScript.SceneGhostPaths[SceneIndex] = ghost.GhostPathNew;
-                    Debug.Log("Time and ghost updated");
                 }
                 if (timer.ClockTime < PreviousBestTime && PreviousBestTime != 0)
                 {
